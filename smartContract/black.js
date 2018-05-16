@@ -29,7 +29,8 @@ var BlackContract = function () {
     //数据
     LocalContractStorage.defineMapProperty(this, "dataMap");
     //index 到 字典key索引
-    LocalContractStorage.defineMapProperty(this, "arrayMap");
+    LocalContractStorage.defineMapProperty(this, "indexMap");
+
     //字典size
     LocalContractStorage.defineProperty(this, "size");
 };
@@ -51,18 +52,18 @@ BlackContract.prototype = {
         }
 
         //如果之前没有添加过，初始化数组
-        var blackMap = this.dataMap.get(key);
-        if (typeof(blackMap) == "undefined" || blackMap == null) {
-            blackMap = [];
+        var blackArray = this.dataMap.get(key);
+        if (typeof(blackArray) == "undefined" || blackArray == null) {
+            blackArray = [];
             var index = this.size;
-            this.arrayMap.set(index, key);
+            this.indexMap.set(index, key);
             this.size += 1;
         }
 
         //添加到数组
-        blackMap.push(blackItem);
+        blackArray.push(blackItem);
         //存储到发布遗言的链中
-        this.dataMap.set(key, blackMap);
+        this.dataMap.set(key, blackArray);
     },
     // 搜索关键字
     search: function (key) {
@@ -76,7 +77,7 @@ BlackContract.prototype = {
         }
 
         for (var i = 0; i < this.size; i++) {
-            var storeKey = this.arrayMap.get(i);
+            var storeKey = this.indexMap.get(i);
             //如果匹配到了数据
             if (storeKey.indexOf(key) != -1) {
                 keyArray.push(storeKey);
@@ -84,9 +85,38 @@ BlackContract.prototype = {
             return keyArray;
         }
     },
+    
+    delete: function (key, index) {
+        //检查入参数
+        index = parseInt(index);
+        if (typeof(key) == "undefined" || key == '' || isNaN(index)) {
+            throw new Error("params error");
+        }
+
+        //如果之前没有添加过，初始化数组
+        var blackArray = this.dataMap.get(key);
+        if (typeof(blackArray) == "undefined" || blackArray == null) {
+            throw new Error("can note find dataMap");
+        }
+
+        var len = blackArray.length;
+        var stayData = [];
+
+        for (var i = 0; i < len; i++) {
+            if (i != index){
+                stayData.push(blackArray[i]);
+            }
+        }
+
+        //添加到数组
+        //存储到发布遗言的链中
+        this.dataMap.set(key, stayData);
+    },
+
     len: function () {
         return this.size;
     },
+
     forEach: function (limit, offset) {
         limit = parseInt(limit);
         offset = parseInt(offset);
@@ -99,7 +129,7 @@ BlackContract.prototype = {
         }
         var result = [];
         for (var i = offset; i < number; i++) {
-            var key = this.arrayMap.get(i);
+            var key = this.indexMap.get(i);
             var object = this.dataMap.get(key);
             var temp = {
                 index: i,
@@ -110,6 +140,7 @@ BlackContract.prototype = {
         }
         return JSON.stringify(result);
     },
+
     get: function (key) {
         if (key === "") {
             throw new Error("empty key")
