@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="lib/bootstrap-4.0.0-dist/css/bootstrap.min.css">
-    <style>
-        .col-md-3 input {
-        }
-    </style>
+    <!--<script src="js/jquery-1.9.1.min.js" />-->
+    <script src="lib/jquery-3.3.1.min.js" />
+    <script src=lib/bootstrap-4.0.0-dist/js/bootstrap.min.js></script>
+    <script src="js/angular.min.js"></script>
 </head>
-<body>
+<body ng-app="blackBody" ng-controller="blackCtrl">
 
 <div class="container">
-
     <nav class="navbar navbar-light bg-faded">
         <a class="navbar-brand" href="#" style="font-size: 40px">黑链</a>
         <ul class="nav navbar-nav">
@@ -20,7 +19,7 @@
                 <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">爆料</a>
+                <a class="nav-link" href="javaScript:void(0);" data-toggle="modal" data-target="#addModal">爆 料</a>
             </li>
 <!--            <li class="nav-item">
                 <a class="nav-link" href="#">声明</a>
@@ -31,7 +30,7 @@
         </ul>
         <form class="form-inline navbar-form pull-right">
             <div class="input-group center-block ">
-                <input id="search" type="text" ng-model="name" placeholder="请输入关键字" class="form-control">
+                <input id="search-key" type="text" ng-model="name" placeholder="请输入关键字" class="form-control">
                 <div class="input-group-append">
                     <span class="input-group-text" id="search-btn">搜索</span>
                 </div>
@@ -41,42 +40,51 @@
     </nav>
 
 
-    <h3 class="align-middle w-100" style="line-height: 200%">最新爆料</h3>
-<!--    <div class="w-50 container">
-        <div class="container text-center">
-            <span class="text-success">输入关键字 您也可以点击爆料提交数据</span>
-                <div class="center-block" style="margin-top: 30px; width: 100%">
-                        <div class="input-group center-block ">
-                            <input id="search" type="text" ng-model="name" placeholder="请输入关键字" class="form-control">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="search-btn">搜索</span>
-                            </div>
-					   </span>
-                        </div>&lt;!&ndash; /input-group &ndash;&gt;
-                </div>&lt;!&ndash; /.row &ndash;&gt;
+    <h3 class="text-center" ng-if="kw" style="line-height: 200%">关于{{kw}}的搜索结果</h3>
+    <h3 class="text-center" ng-if="!kw" style="line-height: 200%"> &nbsp; &nbsp;最新爆料</h3>
+    <div class="row">
+        <div class="col-sm-9">
+            <p class="" ng-repeat="r in list" style="text-indent:2em;">
+                <span class="col-sm-2"></span>
+                <a class="list_txt" href="javascript:void(0);" ng-click="details(r.ref)">
+                    ○ <!--{{r.sketch}}——-->{{r.company}}
+                </a>
+            </p>
+            <div ng-if="list.length < 1">
+                <p class="list_txt">
+                    暂无{{kw}}的数据，提交请点击<a href="#" data-toggle="modal" data-target="#myModal">这里</a>
+                </p>
+            </div>
         </div>
     </div>
-    <br>-->
-<!--    <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action list-group-item-success">Dapibus ac facilisis in</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-primary">This is a primary list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-secondary">This is a secondary list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-success">This is a success list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-danger">This is a danger list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-warning">This is a warning list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-info">This is a info list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-light">This is a light list group item</a>
-        <a href="#" class="list-group-item list-group-item-action list-group-item-dark">This is a dark list group item</a>
-    </div>-->
 
-    <ul class="list-inline">
-        <li><h4>Dapibus ac facilisis in</h4></li>
-        <li><h4>Dapibus ac facilisis in</h4></li>
-        <li><h4>Dapibus ac facilisis in</h4></li>
-        <li><h4>Dapibus ac facilisis in</h4></li>
-        <li><h4>Dapibus ac facilisis in</h4></li>
-        <li><h4>Dapibus ac facilisis in</h4></li>
-    </ul>
+   <!-- <ng-include src="'modal.html'"></ng-include>-->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -103,10 +111,8 @@
 
 
 <script src=lib/nebPay.js></script>
-<script src=lib/bootstrap-4.0.0-dist/js/bootstrap.min.js></script>
 <script src=lib/nebulas.js></script>
 
-<!--
 <script>
     "use strict";
     var dappAddress = "n1g3xcTK76QzmyY1sr8q1PzbBXhsawuKp6c";
@@ -115,31 +121,59 @@
     var nebPay = new NebPay();
     var serialNumber;
 
-    $(function () {
+/*    $(function () {
         var to = dappAddress;
         var value = "0";
         var callFunction = "search";
         var callArgs = "";
 
-        serialNumber = nebPay.simulateCall(to, value, callFunction, callArgs, {
-            listener: initCharts
-        });
+        // serialNumber = nebPay.simulateCall(to, value, callFunction, callArgs, {
+        //     listener: initCharts
+        // });
+    });*/
+
+    var blackApp = angular.module('blackBody',[]);
+    blackApp.controller('blackCtrl', function($scope, $http) {
+        $scope.list = [];
+        for(var i=0;i< 10;i++) {
+            var topic = {};
+            topic.sketch = "sdsdsdf";
+            topic.company = "sdfsdfd";
+            topic.createTime = "ppppppppp";
+            $scope.list[i] = topic;
+        }
+
+        var search = $('#search-key').val().trim();
+        $scope.kw = search;
+
+/*        $(function () {
+            var to = dappAddress;
+            var value = "0";
+            var callFunction = "search";
+            var callArgs = "";
+
+            serialNumber = nebPay.simulateCall(to, value, callFunction, callArgs, {
+                listener: showData
+            });
+        });*/
+        function showData(resp) {
+            console.log("response: " + JSON.stringify(resp));
+            console.log(resp)
+            var dataMap;
+            // dataMap = d_Map;
+            if (resp.result == 'null' || resp.result == '{}' || typeof(resp.result) == "undefined") {
+                alert("没有查询到数据!");
+                return;
+            }
+            else {
+                dataMap = eval(JSON.parse(resp.result));
+            }
+        };
+
     });
 
-    function initCharts(resp) {
-        console.log("response: " + JSON.stringify(resp));
-        console.log(resp)
-        var dataMap;
-        // dataMap = d_Map;
-        if (resp.result == 'null' || resp.result == '{}' || typeof(resp.result) == "undefined") {
-            alert("没有查询到数据!");
-            return;
-        }
-        else {
-            dataMap = eval(JSON.parse(resp.result));
-        }
 
-    }
+
 
 
     $("#push").click(function () {
@@ -210,7 +244,6 @@
         console.log("response of push: " + JSON.stringify(resp))
     }
 </script>
--->
 
 </body>
 </html>
