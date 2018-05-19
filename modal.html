@@ -11,46 +11,33 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content" id="blackBody">
             <div class="modal-header">
+
+                <h4 class="modal-title">填写爆料</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
                 </button>
-                <h4 class="modal-title">填写资料</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="topic-add">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">公司名称</label>
-                        <div class="col-sm-8 text-left">
-                            <input type="text" ng-model="vm.company" name="company"
-                                   placeholder="公司全名" required>*
-                        </div>
+                <form id="black-add">
+                    <div class="form-group row ">
+                        <label class="col-sm-2 control-label text-right" for="company">公司名称</label>
+                        <input class="form-control col-sm-4 text-left" type="text" ng-model="bc.company" id="company" name="company" placeholder="公司全名" required="required" />*
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">爆料原因</label>
-                        <div class="col-sm-8 text-left">
-                            <input type="text" ng-model="vm.sketch" name="sketch"
-                                   placeholder="爆料原因" required>* <span class="help-block">Example:拖欠工资/推延离职...</span>
-                        </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label text-right">爆料标题</label>
+                        <input type="text" class="form-control col-sm-4" ng-model="bc.title" name="title" placeholder="爆料原因" required="required" />* <span class="help-block">Example:拖欠工资/推延离职...</span>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">详细描述</label>
-                        <div class="col-sm-8 text-left">
-							<textarea class="bt-md" ng-model="vm.content" name="content"
-                                      data-provide="markdown" rows="10"></textarea>
-                        </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label text-right">详细描述</label>
+                        <textarea class="form-control col-sm-8 date-picker" id="content" ng-model="bc.content" name="content" rows="5" placeholder="备注内容" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">联系方式</label>
-                        <div class="col-sm-8 text-left">
-                            <input type="text" ng-model="vm.contact" name="contact"
-                                   placeholder="email/qq/tel..."> <span class="help-block">不会在网站展示，仅供进一步确认问题，选填</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label"><input
-                                type="checkbox" checked disabled="disabled"/></label>
-                        <div class="col-sm-8 text-left">
-                            <span class="help-block">以上内容均系用户个人行为，不代表本网站意见，本站不为以上内容承担任何法律责任。</span>
-                        </div>
+<!--                    <div class="form-group row">
+                        <label class="col-sm-2 control-label text-right">联系方式</label>
+                        <input class="form-control col-sm-4" type="text" ng-model="contact" name="contact"
+                                   placeholder="email/qq/tel..."> <span class="help-block ">不会在网站展示，仅供进一步确认问题，选填</span>
+                    </div>-->
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label text-right"><input type="checkbox" checked disabled="disabled"/></label>
+                        <span class="help-block col-sm-8">以上内容均系用户个人行为，不代表本网站意见，本站不为以上内容承担任何法律责任。</span>
                     </div>
                 </form>
             </div>

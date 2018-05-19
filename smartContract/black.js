@@ -5,16 +5,18 @@ var BlackItem = function (text) {
         text = text.replace(/\\/g, "");
         var obj = JSON.parse(text);
         this.title = obj.title;
-        this.keywords = obj.keywords;
+        // this.from = obj.from;
+        // this.keywords = obj.keywords;
         this.company = obj.company;
         this.content = obj.content;
+        // this.contact = obj.contact;
         this.createdate = new Date();
     } else {
         this.title = "";
-        this.keywords = "";
+        // this.keywords = "";
         this.company = "";
         this.content = "";
-        this.content = "";
+        // this.contact = "";
         this.createdate = new Date();
     }
 };
@@ -82,11 +84,19 @@ BlackContract.prototype = {
             if (storeKey.indexOf(key) != -1) {
                 keyArray.push(storeKey);
             }
-            return keyArray;
         }
+
+        return JSON.stringify(keyArray);
     },
     
     delete: function (key, index) {
+        var master = 'n1MWYwsAJQDBjGL7kY5fwkfPcoJUb2HoD58';
+        var from = Blockchain.transaction.from;
+        //如果不是管理员,拒绝×
+        if (master != from) {
+            throw new Error("您没有权限读取");
+        }
+
         //检查入参数
         index = parseInt(index);
         if (typeof(key) == "undefined" || key == '' || isNaN(index)) {
@@ -109,7 +119,6 @@ BlackContract.prototype = {
         }
 
         //添加到数组
-        //存储到发布遗言的链中
         this.dataMap.set(key, stayData);
     },
 
@@ -117,7 +126,22 @@ BlackContract.prototype = {
         return this.size;
     },
 
-    forEach: function (limit, offset) {
+    top: function () {
+        var limit = 20;
+        if (limit > this.size) {
+            limit = this.size;
+        }
+        var end = this.size - limit;
+        var result = [];
+        for (var i = this.size; i > end; i--) {
+            var key = this.indexMap.get(i - 1);
+            // var object = this.dataMap.get(key);
+            result.push(key);
+        }
+        return JSON.stringify(result);
+    },
+
+    page: function (limit, offset) {
         limit = parseInt(limit);
         offset = parseInt(offset);
         if (offset > this.size) {
@@ -131,12 +155,7 @@ BlackContract.prototype = {
         for (var i = offset; i < number; i++) {
             var key = this.indexMap.get(i);
             var object = this.dataMap.get(key);
-            var temp = {
-                index: i,
-                key: key,
-                value: object
-            }
-            result.push(temp);
+            result.push(object);
         }
         return JSON.stringify(result);
     },

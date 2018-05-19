@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>黑链</title>
+    <title>爆料详情</title>
     <link rel="stylesheet" href="lib/bootstrap-4.0.0-dist/css/bootstrap.min.css">
     <script src="lib/jquery-3.3.1.min.js"></script>
     <script src=lib/bootstrap-4.0.0-dist/js/bootstrap.min.js></script>
@@ -14,29 +14,27 @@
             font-weight: bolder;
             vertical-align: middle !important;
         }
-
         .help-block {
             font-size: small;
         }
     </style>
 </head>
 <body ng-app="blackBody" ng-controller="blackCtrl as bc">
-
 <div class="container">
     <nav class="navbar navbar-light bg-faded">
         <a class="navbar-brand" href="index.html" style="font-size: 40px">黑链</a>
         <ul class="nav navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">首页 </a>
+                <a class="nav-link" href="index.html">首页 <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <span data-toggle="modal" data-target="#addModal" class="" style="cursor:pointer">爆 料</span>
+                <span data-toggle="modal" data-target="#addModal" id="add-black-h" class="" style="cursor:pointer">爆 料</span>
                 <!--<a class="nav-link" href="javaScript:void(0);" data-toggle="modal" data-target="#addModal">爆 料</a>-->
             </li>
             <!--            <li class="nav-item">
                             <a class="nav-link" href="#">声明</a>
                         </li>-->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="about.html">关于</a>
             </li>
         </ul>
@@ -44,29 +42,26 @@
             <div class="input-group center-block ">
                 <input id="search-key" type="text" ng-model="name" placeholder="请输入关键字" class="form-control">
                 <div class="input-group-append">
-                    <span class="input-group-text" id="search-btn" ng-click="search()">搜索</span>
+                    <span class="input-group-text" id="search-btn">搜索</span>
                 </div>
                 </span>
             </div>
         </form>
     </nav>
 
-    <div class="container text-center">
-        <h2>黑暗料理</h2>
-        <span class="text-success">爆料您在公司所经历的不公正待遇<br/>帮助他人就是帮助您自己，解决信息不对称的问题</span>
-    </div>
 
-
-    <h3 class="" ng-if="kw" style="line-height: 200%">关于{{kw}}的搜索结果</h3>
-    <h3 class="" ng-if="!kw" style="line-height: 200%"> &nbsp; &nbsp;最新爆料</h3>
+    <h3 class="text-center" id="detail_company" ng-if="company" style="line-height: 200%">关于“{{company}}”的爆料</h3>
     <div class="row">
         <div class="col-sm-9">
-            <p class="" ng-repeat="r in list" style="text-indent:2em;">
-                <span class="col-sm-2"></span>
-                <a class="list_txt" href="javascript:void(0);" ng-click="details(r.company)">
-                    ○ <!--{{r.sketch}}——-->{{r.company}}
-                </a>
-            </p>
+
+            <ul class="list-group list-group-flush" ng-repeat="r in list">
+                <li class="list-group-item">
+                    <h5>{{r.title}}</h5>
+                    <br>
+                    <p>{{r.content}}</p>
+                    <span>{{r.createdate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                </li>
+            </ul>
             <div ng-if="list.length < 1">
                 <p class="list_txt">
                     暂无{{kw}}的数据，提交请点击<a href="javascript:void(0);" data-toggle="modal" data-target="#addModal">这里</a>
@@ -90,26 +85,24 @@
     var nebPay = new NebPay();
     var serialNumber;
 
+    function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+    }
+
     var blackApp = angular.module('blackBody', []);
     blackApp.controller('blackCtrl', function ($scope, $http) {
-        $(function () {
-            var callFunction = "top";
-            var callArgs = "";
-            serialNumber = nebPay.simulateCall(to, value, callFunction, callArgs, {
-                listener: showData
-            });
-        });
+        var company = getURLParameter('company');;
+        $scope.company = company;
 
-        $scope.search = function () {
-            var search = $('#search-key').val().trim();
-            $scope.kw = search;
-            var callFunction = "search";
-            var callArgs = [];
-            callArgs.push(search);
-            serialNumber = nebPay.simulateCall(to, value, callFunction, JSON.stringify(callArgs), {
-                listener: showData
-            });
-        };
+        $(function () {
+                var callFunction = "get";
+                var callArgs = [];
+                callArgs.push(company);
+                serialNumber = nebPay.simulateCall(to, value, callFunction, JSON.stringify(callArgs), {
+                    listener: showData
+                });
+
+        });
 
         var showData = function showData(resp) {
             console.log($scope)
@@ -124,18 +117,16 @@
             var dataArray = eval(JSON.parse(resp.result));
             for (var i = 0; i < dataArray.length; i++) {
                 var topic = {};
-                topic.company = dataArray[i];
+                topic.title = dataArray[i].title;
+                topic.content = dataArray[i].content;
+                topic.createdate = dataArray[i].createdate;
                 $scope.list[i] = topic;
-                console.log(dataArray[i])
+
             }
 
+            console.log($scope.list)
             //刷新数据
             $scope.$apply();
-        };
-
-        $scope.details = function (i) {
-            window.location.href = encodeURI('detail.html?company=' + i);
-            //window.location.href = encodeURI('/details/' + i);
         };
 
         $scope.submit = function () {
@@ -165,6 +156,12 @@
             }, 5000);
         };
 
+        $('#add-black-h').click(function () {
+            $scope.bc.company = company;
+            //刷新数据
+            $scope.$apply();
+        });
+
         var intervalQuery;
 
         function funcIntervalQuery() {
@@ -173,6 +170,7 @@
                     console.log("tx result: " + resp)   //resp is a JSON string
                     var respObject = JSON.parse(resp)
                     if (respObject.code === 0) {
+                        // alert("success")
                         $("#addModal").modal('hide');
                         $("#msgModal .modal-body").html(msg);
                         $("#msgModal").modal();
