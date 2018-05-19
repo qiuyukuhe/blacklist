@@ -27,7 +27,7 @@
         <a class="navbar-brand" href="index.html" style="font-size: 40px">黑链</a>
         <ul class="nav navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">首页 </a>
+                <a class="nav-link" href="index.html">首 页</a>
             </li>
             <li class="nav-item">
                 <span data-toggle="modal" data-target="#addModal" class="" style="cursor:pointer">爆 料</span>
@@ -37,7 +37,7 @@
                             <a class="nav-link" href="#">声明</a>
                         </li>-->
             <li class="nav-item active">
-                <a class="nav-link" href="about.html">关于</a>
+                <a class="nav-link" href="about.html">关 于</a>
             </li>
         </ul>
         <form class="form-inline navbar-form pull-right">
@@ -82,7 +82,7 @@
 
 <script>
     "use strict";
-    var dappAddress = "n1uNCDhwq65NeWZz1dmPKTQmayUz4aid1kf";
+    var dappAddress = "n1m8jgFQYe3A4hxDoDpJvSE5oV3eW3JCRRw";
     var to = dappAddress;
     var value = "0";
 
@@ -117,7 +117,8 @@
             console.log("response: " + JSON.stringify(resp));
             console.log(resp)
             // dataMap = d_Map;
-            if (resp.result == 'null' || resp.result == '"[]"' || typeof(resp.result) == "undefined") {
+            if (resp.result == 'null' || resp.result == '' || resp.result == '"[]"' || typeof(resp.result) == "undefined") {
+                $scope.$apply();
                 return;
             }
 
@@ -160,12 +161,12 @@
                 listener: cbPush        //设置listener, 处理交易返回信息
             });
 
-            intervalQuery = setInterval(function () {
+/*            intervalQuery = setInterval(function () {
                 funcIntervalQuery();
-            }, 5000);
+            }, 5000);*/
         };
 
-        var intervalQuery;
+/*        var intervalQuery;
 
         function funcIntervalQuery() {
             nebPay.queryPayInfo(serialNumber)   //search transaction result from server (result upload to server by app)
@@ -184,9 +185,13 @@
                 .catch(function (err) {
                     console.log(err);
                 });
-        }
+        }*/
 
         function cbPush(resp) {
+            $("#addModal").modal('hide');
+            $("#msgModal .modal-body").html(msg);
+            $("#msgModal").modal();
+            $('#blackBody')[0].reset();
             console.log("response of push: " + JSON.stringify(resp))
         }
     });
