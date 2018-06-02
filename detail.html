@@ -17,6 +17,23 @@
         .help-block {
             font-size: small;
         }
+
+        #footer{
+            padding: 0 0 30px 0;
+            /*color: #eee;*/
+            font-size: 14px
+        }
+
+        #footer .copyright {
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        #footer .credits {
+            text-align: center;
+            padding-top: 15px;
+        }
+
     </style>
 </head>
 <body ng-app="blackBody" ng-controller="blackCtrl as bc">
@@ -49,8 +66,7 @@
         </form>
     </nav>
 
-
-    <h3 class="text-center" id="detail_company" ng-if="company" style="line-height: 200%">关于“{{company}}”的爆料</h3>
+    <h3 class="text-center" id="detail_company" ng-if="company" style="line-height: 200%; margin-top: 30px">关于“{{company}}”的爆料</h3>
     <div class="row">
         <div class="col-sm-9">
             <ul class="list-group list-group-flush" ng-repeat="r in list">
@@ -58,7 +74,7 @@
                     <h5>{{r.title}}</h5>
                     <br>
                     <p>{{r.content}}</p>
-                    <span>{{r.createdate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                    <span>{{r.createdate | date:'yyyy-MM-dd HH:mm:ss'}}创建</span>
                 </li>
             </ul>
             <div ng-if="list.length < 1">
@@ -66,14 +82,41 @@
                     暂无{{kw}}的数据，提交请点击<a href="javascript:void(0);" data-toggle="modal" data-target="#addModal">这里</a>
                 </p>
             </div>
+
+            <div class="row" style="padding-top: 60px">
+                <code >
+                    &nbsp; &nbsp;当事人一人之言，或有失公允，请理性看待！
+                </code>
+            </div>
+
         </div>
+
+        <div class="col-sm-3">
+            <img src="img/1.jpg" style="width: 100%; border: none">
+            <img src="img/2.jpg" style="width: 100%; border: none; margin-top: 30px">
+            <img src="img/3.png" style="width: 100%; border: none; margin-top: 30px">
+            <img src="img/4.png" style="width: 100%; border: none; margin-top: 30px">
+        </div>
+
     </div>
 
 
-    <code>
-           &nbsp; &nbsp;当事人一人之言，或有失公允，请理性看待！
-    </code>
+
 </div>
+
+
+<footer id="footer">
+    <div class="container align-content-center">
+        <div class="copyright align-content-center">
+            &copy; Copyright 基于新一代区块链公链<a href="https://nebulas.io/" target="_blank">NAS</a>
+        </div>
+        <div class="credits align-content-center">
+            <a href="https://incentive.nebulas.io/cn/signup.html?invite=mMffL"
+               target="_blank">点我发布DAPP获取100NAS</a>
+        </div>
+    </div>
+</footer><!-- #footer -->
+
 
 <ng-include src="'modal.html'"></ng-include>
 <script src=lib/nebPay.js></script>

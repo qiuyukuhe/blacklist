@@ -18,6 +18,26 @@
         .help-block {
             font-size: small;
         }
+
+        body{
+            /*background-color: #81b9ca;*/
+        }
+
+        #footer{
+            padding: 0 0 30px 0;
+            /*color: #eee;*/
+            font-size: 14px
+        }
+
+        #footer .copyright {
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        #footer .credits {
+            text-align: center;
+            padding-top: 15px;
+        }
     </style>
 </head>
 <body ng-app="blackBody" ng-controller="blackCtrl as bc">
@@ -56,25 +76,46 @@
         <span class="text-success">爆料您在公司所经历的不公正待遇<br/>帮助他人就是帮助您自己，解决信息不对称的问题</span>
     </div>
 
-
     <h3 class="" ng-if="kw" style="line-height: 200%">关于{{kw}}的搜索结果</h3>
     <h3 class="" ng-if="!kw" style="line-height: 200%"> &nbsp; &nbsp;最新爆料</h3>
     <div class="row">
         <div class="col-sm-9">
-            <p class="" ng-repeat="r in list" style="text-indent:2em;">
-                <span class="col-sm-2"></span>
-                <a class="list_txt" href="javascript:void(0);" ng-click="details(r.company)">
-                    ○ <!--{{r.sketch}}——-->{{r.company}}
-                </a>
-            </p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" ng-repeat="r in list" style="text-indent:2em;">
+                    <span class="col-sm-2"></span>
+                    <a class="list_txt" href="javascript:void(0);" ng-click="details(r.company)">
+                        ○ <!--{{r.sketch}}——-->{{r.company}}
+                    </a>
+                </li>
+            </ul>
+
             <div ng-if="list.length < 1">
                 <p class="list_txt">
                     暂无{{kw}}的数据，提交请点击<a href="javascript:void(0);" data-toggle="modal" data-target="#addModal">这里</a>
                 </p>
             </div>
         </div>
+        <div class="col-sm-3">
+            <img src="img/1.jpg" style="width: 100%; border: none">
+            <img src="img/2.jpg" style="width: 100%; border: none; margin-top: 30px">
+            <img src="img/3.png" style="width: 100%; border: none; margin-top: 30px">
+            <img src="img/4.png" style="width: 100%; border: none; margin-top: 30px">
+        </div>
     </div>
 </div>
+
+
+<footer id="footer">
+    <div class="container align-content-center">
+        <div class="copyright align-content-center">
+            &copy; Copyright 基于新一代区块链公链<a href="https://nebulas.io/" target="_blank">NAS</a>
+        </div>
+        <div class="credits align-content-center">
+            <a href="https://incentive.nebulas.io/cn/signup.html?invite=mMffL"
+               target="_blank">点我发布DAPP获取100NAS</a>
+        </div>
+    </div>
+</footer><!-- #footer -->
 
 <ng-include src="'modal.html'"></ng-include>
 <script src=lib/nebPay.js></script>
